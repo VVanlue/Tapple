@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tapple Game</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+        }
+        .category {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .timer {
+            font-size: 20px;
+            color: red;
+            margin-bottom: 20px;
+        }
+        .circle {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            background: white;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+        }
+        .letter {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            background: #3498db;
+            color: white;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div class="category">Category: <span id="category-name">Loading...</span></div>
+    <div class="timer">Time Left: <span id="timer">10</span> seconds</div>
+    <div class="circle" id="letter-container"></div>
+    
+    <script>
+        const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+        const letterContainer = document.getElementById("letter-container");
+        const categoryElement = document.getElementById("category-name");
+        const timerElement = document.getElementById("timer");
+        let timeLeft = 10;
+        
+        // Sample categories
+        const categories = ["Fruits", "Animals", "Countries", "Movies", "Sports", "Colors", "Cities"];
+        categoryElement.textContent = categories[Math.floor(Math.random() * categories.length)];
+        
+        // Position letters in a circle
+        function createLetterElements() {
+            const radius = 120;
+            alphabet.forEach((letter, index) => {
+                const angle = (index / alphabet.length) * 2 * Math.PI;
+                const x = Math.cos(angle) * radius + 130;
+                const y = Math.sin(angle) * radius + 130;
+                const letterDiv = document.createElement("div");
+                letterDiv.classList.add("letter");
+                letterDiv.textContent = letter;
+                letterDiv.style.transform = `translate(${x}px, ${y}px)`;
+                letterDiv.addEventListener("click", () => {
+                    letterDiv.remove();
+                });
+                letterContainer.appendChild(letterDiv);
+            });
+        }
+        
+        function startTimer() {
+            const timerInterval = setInterval(() => {
+                if (timeLeft > 0) {
+                    timeLeft--;
+                    timerElement.textContent = timeLeft;
+                } else {
+                    clearInterval(timerInterval);
+                    alert("Time's up! Game Over.");
+                }
+            }, 1000);
+        }
+        
+        createLetterElements();
+        startTimer();
+    </script>
+</body>
+</html>
